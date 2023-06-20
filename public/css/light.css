@@ -1,0 +1,42 @@
+::root {
+    /* Sempre as mesmas */
+    --primary: #db5c65;
+    --danger: #ff0000;
+    --success: #7bab6a;
+    --secondary: #f1a800;
+    --secondary-light-1: #f8b825;
+    --secondary-light-2: #ebc46c;
+    --secondary-dark-1: #d19405;
+    --secondary-dark-2: #c48a04;
+    /* Muda de acordo com o modo (claro ou escuro) */
+    --neutral-light-1: #cfced4;
+    --neutral-light-2: #f1e8e8;
+    --neutral-dark-1: #142c8d;
+    --neutral-dark-2: #02145d;
+    --disabled-light: #b6b2ad;
+    --disabled-dark: #99948f;
+}
+
+/* Modo claro */
+body {
+    --background: var(--neutral-light-2);
+    --neutral-contrast-low: var(--neutral-light-1);
+    --neutral-contrast-medium: var(--neutral-dark-1);    
+    --neutral-contrast-high: var(--neutral-dark-2);
+    --disabled: var(--disabled-dark);
+
+    background-color: var(--background);
+}
+
+.navbar {
+    background-color: var(--primary);
+    color: var(--neutral-contrast-low);
+}
+
+.button {
+    background-color: var(--secondary);
+}
+
+.texto {
+    color: var(--neutral-contrast-high);
+}
