@@ -34,9 +34,10 @@ Route::get('/spotify/play/{device_id}', [SpotifyController::class, 'play']);
 
 
 Route::get('/playlist', function() {
-    return view('cadastro_participante.playlist');
+    return view('cadastro_participante.playlist-react');
 });
-Route::post('/playlist/buscar', [SpotifyController::class, 'buscar']);
+Route::get('/spotify/buscar/{search}', [SpotifyController::class, 'buscar']);
+
 Route::post('/playlist/criar', [SpotifyController::class, 'criar']);
 Route::post('/playlist/salvar', [SpotifyController::class, 'salvar']);
 

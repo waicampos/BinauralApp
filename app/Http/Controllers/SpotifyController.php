@@ -177,7 +177,7 @@ class SpotifyController extends Controller
 
 
 
-public function buscar (Request $request)
+public function buscar2 (Request $request)
 {
     $session = new SpotifyWebAPI\Session(
         $this->CLIENT_ID,
@@ -222,6 +222,59 @@ public function buscar (Request $request)
 
     return view('cadastro_participante.playlist', ['searchResult' => $searchResult]);
 }
+
+
+
+public function buscar ($search)
+{
+    $session = new SpotifyWebAPI\Session(
+        $this->CLIENT_ID,
+        $this->CLIENT_SECRET,
+        $this->CALLBACK_URL
+    );
+
+    $options = [
+        'auto_refresh' => true,
+    ];
+    
+    // Use previously requested tokens fetched from somewhere. A database for example.
+    $accessToken = session('SpotifyAcessToken');
+    $refreshToken = session('SpotifyRefreshToken');
+
+    if ($accessToken) {
+        $session->setAccessToken($accessToken);
+        $session->setRefreshToken($refreshToken);
+    } else {
+        // Or request a new access token
+        $session->refreshAccessToken($refreshToken);
+    }
+
+    $api = new SpotifyWebAPI\SpotifyWebAPI($options, $session);    
+    //$api = new SpotifyWebAPI\SpotifyWebAPI();
+    //$accessToken = session('SpotifyAcessToken');
+
+    //$api->setAccessToken($accessToken);
+    //$deviceId = "15693b4dc7241ccba67eb82fbf58fd82bc0f7e0e";
+
+    $searchResult = $api->search($search, 'track');
+
+    // Remember to grab the tokens afterwards, they might have been updated
+    $newAccessToken = $session->getAccessToken();
+    $newRefreshToken = $session->getRefreshToken();
+    //Save data in session
+    session(['SpotifyAcessToken' => $newAccessToken]);
+    session(['SpotifyRefreshToken' => $newRefreshToken]);
+
+
+    //return view('cadastro_participante.playlist', ['searchResult' => $searchResult]);
+
+    $jsonData = json_encode($searchResult);
+
+    return response()->json(['tracks' => $jsonData]);
+}
+
+
+
 
 
 public function criar (Request $request) 

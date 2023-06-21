@@ -5,6 +5,8 @@ import './components/Hello';
 import './components/Login';
 import './components/Player';
 import './components/WebPlayback';
+import './components/Dashboard';
+import './components/TrackSearchResult';
 
 // import Alpine from 'alpinejs';
 // import focus from '@alpinejs/focus';
