@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>~~Play song~~</title>
+</head>
+<body>
+
+    <div id="app" aria-live="polite">5</div>
+    <button onclick="togglePlay()">Play/Pause</button>
+
+    <script>
+
+        let audio = new Audio("../../../public/wav/zenmix-delta.wav");
+
+        function togglePlay() {
+            audio.paused ? audio.play() : audio.pause();
+        }   
+
+    </script>
+
+</body>
+</html>

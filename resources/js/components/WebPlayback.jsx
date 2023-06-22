@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-
 const track = {
     name: "",
     album: {
@@ -21,6 +20,8 @@ function WebPlayback(props) {
     const [player, setPlayer] = useState(undefined);
     const [current_track, setTrack] = useState(track);
     const [data, setData] = useState(null)
+
+    const binaural = new Audio("../../../wav/zenmix-delta.wav");
 
     useEffect(() => {
 
@@ -86,6 +87,13 @@ function WebPlayback(props) {
         }
     };
 
+    
+    function togglePlay() {
+        binaural.paused ? binaural.play() : binaural.pause();
+        //player.togglePlay();
+    }
+
+
     function checkResponse(data) {
         console.debug(data)
         if (data) {
@@ -114,6 +122,10 @@ function WebPlayback(props) {
     } else {
         return (
             <>
+            {/* <button onClick={() => { togglePlay() }}>Play/Pause</button> */}
+
+
+
                 <div className="container">
                     <div className="main-wrapper">
 
@@ -126,7 +138,7 @@ function WebPlayback(props) {
                             <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
                                 &lt;&lt;
                             </button>
-
+                            {/* Aqui que eu tenho que chamar uma função que dá o togglePlay lá e o togglePlay no binaural */}
                             <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
                                 {is_paused ? "PLAY" : "PAUSE"}
                             </button>
@@ -150,6 +162,7 @@ function WebPlayback(props) {
                     </div>
 
                 </div>
+                <audio src="../../../wav/zenmix-delta.wav"></audio>
             </>
         );
     }

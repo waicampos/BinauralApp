@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>~~Play song~~</title>
+</head>
+<body>
+
+    <div id="app" aria-live="polite">5</div>
+    <button onclick="togglePlay()">Play/Pause</button>
+
+    <script>
+
+        let audio = new Audio('zenmix-delta.wav');
+        //audio.play();
+
+        function togglePlay() {
+            audio.paused ? audio.play() : audio.pause();
+        }
+
+        /**
+         * Play the chime sound
+         */
+        // function playSound () {
+        //     let ding = new Audio('ding.mp3');
+        //     ding.play();
+        // }
+ 
+        // // Get the #app element
+        // let app = document.querySelector('#app');
+
+        // // Track the count
+        // let count = 5;
+
+        // // Run a callback function once every second
+        // let timer = setInterval(function () {
+
+        //     // Reduce count by 1
+        //     count--;
+
+        //     // Update the UI
+        //     if (count > 0) {
+        //         app.textContent = count;
+        //     } else {
+        //         app.textContent = '⏰';
+        //         clearInterval(timer);
+        //         playSound();
+        //     }
+
+        // }, 1000);   
+
+    </script>
+
+</body>
+</html>
