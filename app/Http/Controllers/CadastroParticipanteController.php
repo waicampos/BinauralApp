@@ -34,9 +34,17 @@ class CadastroParticipanteController extends Controller
 
     public function iniciar($projeto_id, $grupo_numero) 
     {
+        // Aqui tem que fazer o esquema de ver se existe o projeto e o grupo
+        // FindOrFail projeto
+        // FindOrFail grupo
+        $projeto = new Projeto();
+        $grupo = new Grupo();
+        $projeto = $projeto->findActiveById($projeto_id);
+        $grupo = $grupo->findActive($projeto->id, $grupo_numero);
+
         $this->dto = new ParticipanteDTO();
-        $this->dto->projeto_id = $projeto_id;
-        $this->dto->grupo_numero = $grupo_numero;
+        $this->dto->projeto_id = $projeto->id;
+        $this->dto->grupo_numero = $grupo->numero;
 
         $this->paginaAtual = 1;
 
@@ -126,6 +134,55 @@ class CadastroParticipanteController extends Controller
         $user = auth()->user();
         $participante = new Participante();
 
+        // Então, aqui, fazer a correspondência entre o DTO e a tabela participantes
+        // $table->foreignId('user_id')->constrained();
+        // $table->foreignId('projeto_id')->constrained();
+        // $table->foreignId('grupo_id')->constrained();
+        // $table->string('playlist_url')->nullable();
+        // $table->boolean('autoriza_uso_dados');
+        // $table->foreignId('status_id')->constrained(table: 'status', column: 'id');
+        // $table->timestamps();
+
+        // DTO
+        // public $nome;
+        // public $sobrenome;
+        // public $data_nascimento;
+        // public $projeto_nome;
+        // public $projeto_id;
+        // public $indicadores = ['genero' => null, 'cor' => null];
+        // public $grupo_numero;
+        // public $documento;
+        // public $autorizacao;
+        // public $playlist_uri;
+        // public $questionario_inicial = ['sentimento' => null];
+
+        // As classes ainda não estão alinhadas...
+        // Devido ao User
+
+        // Supondo que eu tenha um user com os atributos:
+        // id
+        // nome
+        // data_nascimento
+
+        // São estas tabelas que precisa atualizar:
+        // participante_projeto
+        // indicadores (precisa iterar)
+        // questionario (precisa iterar)
+
+        // Tabela indicadores vai precisar: (como teste)
+        // id_projeto
+        // id_grupo
+        // id_participante
+        // genero (ia ter que ter outra tabela) (vamos fazer do jeito simples primeiro)
+        // cor (ia ter que ter outra tabela) (vamos fazer do jeito simples primeiro)
+
+        // Tabela questionario
+        // id_projeto
+        // id_grupo
+        // id_participante
+        // sentimento
+
+
         foreach($this->dto as $property => $value) {
             if(property_exists($participante, $property)) {
                 $participante->$property = $value;
@@ -138,6 +195,11 @@ class CadastroParticipanteController extends Controller
         // tem que mandar mensagem
     }
 
+
+
+
+    // Daqui para baixo, não estou mais usando
+    
 
     public function iniciarCadastro($projeto_id, $grupo_numero) {
         $user = auth()->user();
