@@ -7,7 +7,7 @@
     </div>
 
     <div class="container-fluid p-0 m-0">
-        <p>Prezado/a Senhor/a, XXX</p>
+        <p>Prezado/a Senhor/a, <strong>{{session('dto')->nome}} {{session('dto')->sobrenome}}</strong></p>
         <p>Você está sendo convidado/a a participar de uma oficina sensorial Música e Emoções, que está sendo desenvolvida por 
             Cristiane Antunes Espindola, do Núcleo de Acessibilidade Educacional - NAE/IFSC (Campus Florianópolis).</p>
         <p>O objetivo do projeto de extensão é “Realizar encontros de terapia binaural para o alcance do bem estar físico e 
@@ -51,7 +51,7 @@
     <div class="container-fluid my-5 p-0" id="consentimento">
         <h3>CONSENTIMENTO</h3>
         
-        <p>Eu, <strong>{{ session('dto')->nome ?? "Nome não informado!" }}</strong>, RG nº 
+        <p>Eu, <strong>{{ session('dto')->nome}} {{session('dto')->sobrenome }}</strong>, RG nº 
         <strong>{{ session('dto')->documento ?? "Rg não informado!"}}</strong>, acredito ter sido suficientemente informado/a e 
         concordo em participar como voluntário/a da pesquisa descrita acima.</p>
 
@@ -62,7 +62,7 @@
             <div class="form-group my-2">
 
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="DTO[autorizacao]" id="autorizacao_1" value="1" required {{ session('dto')->autorizacao === 1 ? "checked" : "" }}>
+                    <input class="form-check-input" type="radio" name="DTO[autorizacao]" id="autorizacao_1" value="1" required checked {{ session('dto')->autorizacao === 1 ? "checked" : "" }}>
                     <label for="autorizacao_1"><strong>Concordo</strong> com o Termo e AUTORIZO o uso de meus dados para os fins descritos acima. <span class="info-adicional">(Você receberá o Termo de Consentimento acima por email)</span> </label>   
                 </div>
 

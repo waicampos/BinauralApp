@@ -6,16 +6,23 @@ export default function Track({ track }) {
 //   }
 
   return (
-    <div
-      className="d-flex m-2 align-items-center"
-      //style={{ cursor: "pointer" }}
-      //onClick={handlePlay}
-    >
-      {/* <img src={track.albumUrl} style={{ height: "64px", width: "64px" }} /> */}
-      <div className="ml-3">
-        <div>{track.title}</div>
-        {/* <div className="text-muted">{track.artist}</div> */}
+    <div className="container-md text-center playlist">
+
+      <div class="container-fluid p-0 m-0 row song">
+          <div class="col-10 m-0">
+              <div class="song-title">
+                {track.title}
+              </div>
+              <div class="song-artist">
+                  {track.artist}
+              </div>
+
+          </div>
+          <div class="col-2 m-0">
+              X
+          </div>
       </div>
     </div>
+
   )
 }

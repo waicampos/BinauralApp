@@ -2,7 +2,7 @@
 @extends('layouts.cadastro')
 @section('content')
 
-    <p>XXX, altere ou confirme os dados abaixo:</p>
+    <p>{{session('dto')->nome}}, altere ou confirme os dados abaixo:</p>
     
     <form action="/cadastrar_participante" method="post">
         @csrf

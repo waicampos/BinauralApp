@@ -12,6 +12,7 @@ class ParticipanteDTO extends Model
     public $nome;
     public $sobrenome;
     public $data_nascimento;
+    public $email;
     public $projeto_nome;
     public $projeto_id;
     public $indicadores = ['genero' => null, 'cor' => null];

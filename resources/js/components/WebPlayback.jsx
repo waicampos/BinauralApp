@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import delta from "../../../public/wav/zenmix-delta.wav"
+//import "./binaural.js"
 
 const track = {
     name: "",
@@ -19,9 +22,37 @@ function WebPlayback(props) {
     const [is_active, setActive] = useState(false);
     const [player, setPlayer] = useState(undefined);
     const [current_track, setTrack] = useState(track);
-    const [data, setData] = useState(null)
+    const [data, setData] = useState(null);
+    const [wavePlayer, setWavePlayer] = useState('paused');
+    const [playerId, setPlayerId] = useState(undefined);
+    
 
-    const binaural = new Audio("../../../wav/zenmix-delta.wav");
+    const wave = new Audio(delta)
+    function toogleWave() {
+        if(wavePlayer == 'paused') {
+            wave.play();  
+            setWavePlayer('playing');
+            console.log("wavePlayer set to: " + wavePlayer);
+        } 
+        // tentar descobrir pq o wave.pause() não funciona!
+    }
+
+    function play() {
+        async function prepare_player() {
+            //await fetch('/spotify/transfer/' + device_id);
+            await fetch('/spotify/play/' + playerId);
+        }
+        prepare_player().
+            then(() => {
+                try {toogleWave()}
+                catch (error) {
+                    console.log(error);
+                    setWavePlayer('paused');
+                    console.log("wavePlayer set to: " + wavePlayer);
+                }
+            });
+    }
+
 
     useEffect(() => {
 
@@ -43,11 +74,13 @@ function WebPlayback(props) {
 
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
-                fetch('/play/' + device_id);
+                setPlayerId(device_id);
+                
             });
 
             player.addListener('not_ready', ({ device_id }) => {
                 console.log('Device ID has gone offline', device_id);
+                setPlayerId(device_id);
             });
 
             player.addListener('player_state_changed', (state => {
@@ -88,10 +121,12 @@ function WebPlayback(props) {
     };
 
     
-    function togglePlay() {
-        binaural.paused ? binaural.play() : binaural.pause();
-        //player.togglePlay();
-    }
+    // const playbinaural = () => {
+    //     //binaural.paused ? binaural.play() : binaural.pause();
+    //     //player.togglePlay();
+    //     console.log("Que diabos");
+    //     binaural.play();
+    // }
 
 
     function checkResponse(data) {
@@ -115,16 +150,16 @@ function WebPlayback(props) {
             <>
                 <div className="container">
                     <div className="main-wrapper">
-                        <b> Instance not active. Transfer your playback using your Spotify app </b>
+                        <button className="btn btn-spotify" onClick={() => { play() }} > Iniciar Player </button>
                     </div>
                 </div>
             </>)
     } else {
         return (
             <>
+            {/* <img src="/wav/img.png" alt="Imahe" /> */}
             {/* <button onClick={() => { togglePlay() }}>Play/Pause</button> */}
-
-
+            {/* <button className="btn btn-danger" onClick={ () => {toogleWave()} }>Play Binaural</button> */}
 
                 <div className="container">
                     <div className="main-wrapper">
@@ -139,7 +174,11 @@ function WebPlayback(props) {
                                 &lt;&lt;
                             </button>
                             {/* Aqui que eu tenho que chamar uma função que dá o togglePlay lá e o togglePlay no binaural */}
-                            <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
+                            <button className="btn-spotify" onClick={() => { 
+                                toogleWave();
+                                player.togglePlay(); 
+                                //binaural.paused ? binaural.play() : binaural.pause(); 
+                            }} >
                                 {is_paused ? "PLAY" : "PAUSE"}
                             </button>
 
@@ -151,7 +190,7 @@ function WebPlayback(props) {
 
                     </div>
                 </div>
-                <div class="container">
+                {/* <div class="container">
                     <div class="playlist main-wrapper">
                         <div>
                             <button onClick={handlePlaylists} >
@@ -161,8 +200,9 @@ function WebPlayback(props) {
                         {checkResponse(data)}
                     </div>
 
-                </div>
-                <audio src="../../../wav/zenmix-delta.wav"></audio>
+                </div> */}
+
+
             </>
         );
     }

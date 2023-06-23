@@ -6,11 +6,15 @@
 
     <div class="cadastro_confirma_dado">
         <label for="nome">Nome: </label>
-        <span id="nome">XXX</span>
+        <span id="nome">{{session('dto')->nome}} {{session('dto')->sobrenome}}</span>
     </div>
     <div class="cadastro_confirma_dado">
         <label for="data_nascimento">Data de Nascimento: </label>
-        <span id="data_nascimento">XXX</span>
+        <span id="data_nascimento">{{session('dto')->data_nascimento}}</span>
+    </div>
+    <div class="cadastro_confirma_dado">
+        <label for="nome">Email: </label>
+        <span id="nome">{{session('dto')->email}}</span>
     </div>
     <div class="cadastro_confirma_dado">
         <label for="documento">RG: </label>
@@ -26,7 +30,7 @@
     </div>
     <div class="cadastro_confirma_dado">
         <label for="projeto_nome">Projeto: </label>
-        <span id="projeto_nome">{{session('dto')->projeto_id}}</span>
+        <span id="projeto_nome">{{session('dto')->projeto_nome}}</span>
     </div>
     <div class="cadastro_confirma_dado">
         <label for="grupo">Grupo: </label>
@@ -41,7 +45,7 @@
         <span id="questionario">{{session('dto')->questionario_inicial['sentimento']}}</span>
     </div>         
 
-    <form action="/cadastrar_participante" method="post">
+    <form action="/cadastrar_participante/finalizar" method="post">
         @csrf
         <!-- Aqui sim vamos ter um post! -->
         <div class="botoes_navegacao_cadastro">

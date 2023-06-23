@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,6 +23,12 @@ return new class extends Migration
             $table->time('oficina_horario');
             $table->foreignId('status_id')->constrained(table: 'status', column: 'id');
         });
+
+        Artisan::call( 'db:seed', [
+            '--class' => 'GruposSeeder',
+            '--force' => true ]
+        );
+        
     }
 
     /**

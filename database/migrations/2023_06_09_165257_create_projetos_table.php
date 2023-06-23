@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -21,6 +22,11 @@ return new class extends Migration
             $table->foreignId('status_id')->constrained(table: 'status', column: 'id');
             $table->timestamps();
         });
+
+        Artisan::call( 'db:seed', [
+            '--class' => 'ProjetosSeeder',
+            '--force' => true ]
+        );
     }
 
     /**

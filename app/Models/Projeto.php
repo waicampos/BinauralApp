@@ -15,7 +15,7 @@ class Projeto extends Model
     /** Buscas de Projetos no Banco de Dados */
     public static function findActiveById($id) 
     {
-        return Projeto::findOrFail()->where('id', $id)->where('status', 1);
+        return Projeto::where('id', $id)->where('status_id', 1)->firstOrFail();
     }
 
 

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\URL;
 use SpotifyWebAPI;
 
 
@@ -16,6 +17,7 @@ class SpotifyController extends Controller
 
 
     public function login()
+    
     {
         $session = new SpotifyWebAPI\Session(
             $this->CLIENT_ID,
@@ -37,6 +39,8 @@ class SpotifyController extends Controller
                 'playlist-modify-private',
                 'user-read-private',
                 'user-read-email',
+                'user-modify-playback-state',
+                'user-read-playback-state',
                 'streaming'
             ],
             'state' => $state,
@@ -47,9 +51,9 @@ class SpotifyController extends Controller
     }
 
 
+
     public function callback ()
     {
-
         $session = new SpotifyWebAPI\Session(
             $this->CLIENT_ID,
             $this->CLIENT_SECRET,
@@ -82,12 +86,10 @@ class SpotifyController extends Controller
         return redirect('/');
     }
 
+
+
     public function transfer_playback($token, $device_id) 
     {
-
-        //$device = $device_id; 
-        //$token = session('SpotifyAcessToken');
-
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, 'https://api.spotify.com/v1/me/player');
@@ -111,6 +113,7 @@ class SpotifyController extends Controller
     }
 
 
+
     public function token ()
     {
         // Retrieve accessToken from storage
@@ -121,11 +124,9 @@ class SpotifyController extends Controller
     }
 
 
+
     public function me ()
     {
-
-
-
         $api = new SpotifyWebAPI\SpotifyWebAPI();
 
         // Fetch the saved access token from somewhere. A session for example.
@@ -147,9 +148,9 @@ class SpotifyController extends Controller
     }
 
 
-    public function play($device_id)
-    {
 
+    public function transfer($device_id)
+    {
         $session = new SpotifyWebAPI\Session(
             $this->CLIENT_ID,
             $this->CLIENT_SECRET,
@@ -166,10 +167,46 @@ class SpotifyController extends Controller
         $api->setAccessToken($accessToken);
         //$deviceId = "15693b4dc7241ccba67eb82fbf58fd82bc0f7e0e";
 
-        $tranfer_response = $this->transfer_playback($accessToken, $device_id);
+        $response = $api->changeMyDevice(['device_ids' => $device_id, 'play' => false]);
         
+        return $response;
+    }
+
+
+
+    public function play($device_id)
+    {
+        $session = new SpotifyWebAPI\Session(
+            $this->CLIENT_ID,
+            $this->CLIENT_SECRET,
+            $this->CALLBACK_URL
+        );
+
+        $options = [
+            'auto_refresh' => true,
+        ];       
+        
+        $api = new SpotifyWebAPI\SpotifyWebAPI();
+        $accessToken = session('SpotifyAcessToken');
+
+        $api->setAccessToken($accessToken);
+        //$deviceId = "15693b4dc7241ccba67eb82fbf58fd82bc0f7e0e";
+
+        //$api->changeMyDevice($device_id);
+        
+
+        // Retrieve Playlist Id from storage 
+        $playlist_id = session('SpotifyPlaylistId');
+
+        // Get playlist data 
+        $playlist = $api->getPlaylist($playlist_id);
+
+        // Get Uri from playlist_id
+        $uri = $playlist->uri;
+
+
         $api->play($device_id, [
-            'uris' => ['spotify:track:14SO7JAN6L7Mk1ZUmabJaI'],
+            'context_uri' => $uri        
         ]);
     }
    
@@ -341,7 +378,7 @@ public function criar (Request $request)
 }
 
 
-public function salvar (Request $request) 
+public function playlist (Request $request) 
 {
 
     $session = new SpotifyWebAPI\Session(
@@ -366,28 +403,28 @@ public function salvar (Request $request)
         $session->refreshAccessToken($refreshToken);
     }
 
-    $options = [
-        'auto_refresh' => true,
-    ];
-
     $api = new SpotifyWebAPI\SpotifyWebAPI($options, $session);    
 
-    $playlist_name = $request->playlist;
-    $track_uri = $request->track;
+    // Para criar o nome deve pegar o id do usuario na aplicação
+    $playlist_name = Carbon::now();
 
-    $api->createPlaylist([
+    $response = $api->createPlaylist([
         'name' => $playlist_name
     ]);
 
+    $playlist_id = $response->id;
+    session(['SpotifyPlaylistId' => $playlist_id]);
 
-    $api->addPlaylistTracks('PLAYLIST_ID', [
-        'TRACK_ID',
-        'EPISODE_URI'
-    ]);
+    // Lista de Tracks vem de json da requisição
+    $data = $request->json()->all();
+
+    // Ver onde a playlist está na data
+    $tracks = $data['tracks'];
+
+    //$tracks = $request->playlist;
+
+    $api->addPlaylistTracks($playlist_id, $tracks);
     
-
-
-
     // Remember to grab the tokens afterwards, they might have been updated
     $newAccessToken = $session->getAccessToken();
     $newRefreshToken = $session->getRefreshToken();
@@ -395,8 +432,12 @@ public function salvar (Request $request)
     session(['SpotifyAcessToken' => $newAccessToken]);
     session(['SpotifyRefreshToken' => $newRefreshToken]);
 
+    return json_encode(['Success' => "Playlist criada com sucesso"]);
 
-    return view('cadastro_participante.playlist', ['searchResult' => $searchResult]);
+    //return redirect('/')->with('msg', 'Sua playlist foi criada!');
+
+
+    //return view('cadastro_participante.playlist', ['searchResult' => $searchResult]);
 
 }
 

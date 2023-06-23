@@ -14,13 +14,14 @@ class CadastroParticipanteController extends Controller
 
     public $viewsFolder = 'cadastro_participante.';
     public $views = [
-        1 => 'inicio',
-        2 => 'indicadores',
-        3 => 'aviso_termo',
-        4 => 'termo',
-        5 => 'questionario',
-        6 => 'playlist',
-        7 => 'revisar',
+        'inicio',
+        'user',
+        'indicadores',
+        'aviso_termo',
+        'termo',
+        'questionario',
+        //'playlist',
+        'revisar',
     ];
 
     public $actualView;
@@ -32,8 +33,9 @@ class CadastroParticipanteController extends Controller
     public $log = [];
    
 
-    public function iniciar($projeto_id, $grupo_numero) 
+    public function iniciar(Request $request, $projeto_id, $grupo_numero) 
     {
+        //$request->session()->flush();
         // Aqui tem que fazer o esquema de ver se existe o projeto e o grupo
         // FindOrFail projeto
         // FindOrFail grupo
@@ -44,9 +46,10 @@ class CadastroParticipanteController extends Controller
 
         $this->dto = new ParticipanteDTO();
         $this->dto->projeto_id = $projeto->id;
+        $this->dto->projeto_nome = $projeto->nome;
         $this->dto->grupo_numero = $grupo->numero;
 
-        $this->paginaAtual = 1;
+        $this->paginaAtual = 0;
 
         $this->atualizarSessao();
 
@@ -183,15 +186,17 @@ class CadastroParticipanteController extends Controller
         // sentimento
 
 
-        foreach($this->dto as $property => $value) {
-            if(property_exists($participante, $property)) {
-                $participante->$property = $value;
-            }
-        }
+        // foreach($this->dto as $property => $value) {
+        //     if(property_exists($participante, $property)) {
+        //         $participante->$property = $value;
+        //     }
+        // }
        
-        $participante->save();
+        //$participante->save();
 
-        return redirect('home'); 
+
+
+        return redirect('/playlist'); 
         // tem que mandar mensagem
     }
 

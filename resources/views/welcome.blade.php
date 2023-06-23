@@ -12,8 +12,9 @@
     <p>{{session('SpotifyAcessToken') ?? "Sem acess_token"}}</p>
 
     <div id="player"></div>
-    <div id="hello-react"></div>
+    <!-- <div id="hello-react"></div>
     <div id="counter"></div>
+    <div id="binaural"></div> -->
 
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])

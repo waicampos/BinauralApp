@@ -21,10 +21,12 @@ export default function Dashboard({ code }) {
   const [timer, setTimer] = useState(null)
   const [playlist, setPlaylist] = useState([])
   //const [lyrics, setLyrics] = useState("")
+  const [playlist_uris, setPlaylist_uris] = useState([])
 
 
   function chooseTrack(track) {
     setPlaylist(playlist => [...playlist, track])
+    setPlaylist_uris(playlist_uris => [...playlist_uris, track.uri])
     console.log(playlist);
     //setSearch("")
     //setLyrics("")
@@ -111,6 +113,31 @@ export default function Dashboard({ code }) {
   }, [search])
 
 
+  function salvarPlaylist () {
+    const playlistUris = []
+    playlist.map(track => (
+      playlistUris.push(track.uri)
+    ))
+    let playlist_to_save = {tracks: playlistUris};
+    //let json_tracks = JSON.stringify(playlist_to_save);
+    //console.log(json_tracks);
+
+    fetch('/playlist', {
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/; charset=UTF-8",
+        "X-CSRF-Token": csrf_token
+      },
+      method: "post",
+      credentials: "same-origin",
+      body: JSON.stringify(playlist_to_save),
+    })
+       .then(() => {window.location.href = "/";})
+       .catch((err) => {
+          console.log(err.message);
+       });
+  }
+
   // preciso dar um settimeout no setsearch...
   // Lógica
   // Mudou... espera 100 segundos
@@ -160,6 +187,14 @@ export default function Dashboard({ code }) {
           />
         ))}
     </div>
+    {/* <form action="/playlist" method="POST"> */}
+      
+     {/* <input type="hidden" name="X-CSRF-Token" value={csrf_token}/>
+     <input type="hidden" name="playlist" value={playlist_uris}/>
+     <button className="btn btn-secondary">Salvar Playlist</button>
+    </form> */}
+
+    <button className="btn btn-secondary" onClick={() => { salvarPlaylist() }}>Salvar playlist</button>
     {/* Botão de Salvar a playlist para fazer requisição ao php, que irá criar a playlist, incluir a lista de músicas e salvar o a uri da playlist associada ao usuário */}
     </Container>
   )

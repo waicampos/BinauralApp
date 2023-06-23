@@ -16,7 +16,7 @@ class Grupo extends Model
     /** Buscas de Grupos no Banco de Dados */
     public static function findActive($projeto_id, $group_number) 
     {
-        $grupo = Grupo::where('projeto_id', $projeto_id)->where('numero', $group_number)->where('status', 1)->firstOrFail();
+        $grupo = Grupo::where('projeto_id', $projeto_id)->where('numero', $group_number)->where('status_id', 1)->firstOrFail();
         //$grupo = Grupo::where('projeto_id', $projeto_id)->where('numero', $group_number)->firstOrFail();
         // if ($grupo->isActive()) {
         //     return $grupo;
