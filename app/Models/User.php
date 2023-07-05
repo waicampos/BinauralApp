@@ -1,45 +1,51 @@
 <?php
-
 namespace App\Models;
+use App\Models\AbstractModels\AbstractUser;
+use Carbon\Carbon;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-
-class User extends Authenticatable
+class User extends AbstractUser
 {
-    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    
+
+
+    protected $attributes = [
+        'status_id' => 1,
+        'category_id' => 1,
+        'civil_state_id' => 1 
+    ];
+
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
+        'has_social_name',
+        'birth_date',
+        'cpf',
         'email',
-        'password',
+        'password'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function name() 
+    {
+        if ($this->has_social_name) {
+            $this->firstname = $this->socialName->firstname;
+        }
+        return $this->firstname;
+    }
+
+    public function lastname() 
+    {
+        if ($this->has_social_name) {
+            $this->lastname = $this->socialName->lastname;
+        }
+        return $this->lastname;
+    }
+
+    public function age() 
+    {
+        return Carbon::parse($this->birth_date)->age; 
+    }
+    
+
 }
