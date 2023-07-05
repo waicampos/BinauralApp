@@ -6,14 +6,21 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "cloudmersive/cloudmersive_validate_api_client": "^3.0",
+        "dompdf/dompdf": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "jwilsson/spotify-web-api-php": "^5.6",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "phpoffice/phpword": "^1.1",
+        "tecnickcom/tcpdf": "^6.6",
+        "zamzar/zamzar-php": "^2.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.8",
         "fakerphp/faker": "^1.9.1",
+        "laravel/breeze": "^1.21",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",

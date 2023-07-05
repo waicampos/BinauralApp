@@ -1,19 +1,6 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Status extends Model
+class Status extends \App\Models\AbstractModels\AbstractStatus
 {
-    use HasFactory;
-
-    protected $table = 'status';
-
-    public function isActive() 
-    {
-        return $this->id === 1;
-    }
-    
 }

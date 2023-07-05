@@ -1,54 +1,64 @@
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <x-guest-layout>
-    <x-authentication-card>
-        <!-- <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot> -->
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
 
-        <x-validation-errors class="mb-4" />
+    <div>
+        <ul>
+            @foreach ($errors->all() as $message)
+                <li>{{$message}}</li>
+            @endforeach
+        </ul>
+    </div>
 
-        @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
+
+        <!-- Email Address -->
+        <div class="">
+            <label for="email" class="form-label">{{ __('Email') }}:</label>
+            <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required autocomplete="username">
+            <x-input-error :messages="$errors->get('email')" class="mt-2 invalid-feedback" />
+            <div class="invalid-feedback">Informe um email válido</div>
+        </div>
+
+        <!-- Password -->
+        <div>
+            <div class="">
+                <label for="password" class="form-label">{{ __('Senha') }}: </label>
+                <input type="password" name="password" id="password" class="form-control" required autocomplete="current-password">
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                <div class="invalid-feedback">Informe sua senha segura</div>
             </div>
-        @endif
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <div class="fs-4 col-1">
+                <i id="see_password" class="bi bi-eye-slash"></i>
             </div>
+        </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Senha') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-            </div>
+        <!-- Remember Me -->
+        <div class="">
+            <input id="remember" type="checkbox" class="form-check-input" name="remember" id="remember">
+            <label for="remember" class="form-label">{{ __('Lembrar') }}</label>
+        </div>
 
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Lembrar de mim') }}</span>
-                </label>
-            </div>
+        <div class="">
+                <a class="" href="{{ route('register') }}">
+                    {{ __('Registrar nova conta') }}
+                </a>            
+        </div>
 
-            <div class="flex items-center justify-end mt-4">
+        <div class="">
+            @if (Route::has('password.request'))
+                <a class="" href="{{ route('password.request') }}">
+                    {{ __('Esqueceu sua senha?') }}
+                </a>
+            @endif            
+        </div>
 
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Esqueceu a senha?') }}
-                    </a>
-                @endif
+        <button type="submit" class="btn btn-primary">{{ __('Log in') }}</button>
 
-                <x-button class="ml-4">
-                    {{ __('Log in') }}
-                </x-button>
-                <div class="flex items-center justify-end mt-4">
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register') }}">
-                        {{ __('Não possuo cadastro') }}
-                    </a>
-                </div>
-            </div>
-        </form>
-    </x-authentication-card>
+    </form>
+
+
 </x-guest-layout>

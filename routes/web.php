@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\CadastroParticipanteController;
-use App\Http\Controllers\SpotifyController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\CadastroController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,31 +19,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('count', function (Request $request) {
-    return response()->json([
-        'message' => $request->message,
-    ]);
+Route::get('/teste', function () {
+    return view('auth.teste');
 });
 
-Route::get('/spotify/login', [SpotifyController::class, 'login']);
-Route::get('/spotify/callback', [SpotifyController::class, 'callback']);
-Route::get('/spotify/token', [SpotifyController::class, 'token']);
-
-Route::get('/spotify/play/{device_id}', [SpotifyController::class, 'play']);
-Route::get('/spotify/transfer/{device_id}', [SpotifyController::class, 'transfer']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::get('/playlist', function() {
-    return view('cadastro_participante.playlist-react');
+Route::get('/cadastro', [CadastroController::class, 'create']
+)->middleware(['auth', 'verified'])->name('cadastro');
+Route::post('/cadastro', [CadastroController::class, 'store']
+)->middleware(['auth', 'verified'])->name('store');
+
+/**Rotas Provisórias para Teste */
+Route::get('/store', [CadastroController::class, 'store']
+)->middleware(['auth', 'verified'])->name('store');
+Route::get('/gerar', [CadastroController::class, 'gerar']
+)->middleware(['auth', 'verified'])->name('gerar');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/spotify/buscar/{search}', [SpotifyController::class, 'buscar']);
 
-Route::post('/playlist', [SpotifyController::class, 'playlist']);
-//Route::get('/playlist/salvar', [SpotifyController::class, 'playlist']);
-
-
-
-Route::get('/cadastrar_participante/{projeto}/{grupo}', [CadastroParticipanteController::class, 'iniciar']);   
-Route::post('/cadastrar_participante', [CadastroParticipanteController::class, 'cadastrar']);  
-Route::post('/cadastrar_participante/finalizar', [CadastroParticipanteController::class, 'finalizar']);   
-
+require __DIR__.'/auth.php';

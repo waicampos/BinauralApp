@@ -1,28 +1,27 @@
 <x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+    <div class="">
+        {{ __('Esta é uma área protegida. Por favor, confirme sua senha antes de prosseguir.') }}
+    </div>
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+    <form method="POST" action="{{ route('password.confirm') }}">
+        @csrf
+
+        <!-- Password -->
+        <div>
+            <div class="">
+                <label for="password" class="form-label">{{ __('Senha') }}: </label>
+                <input type="password" name="password" id="password" class="form-control" required autocomplete="current-password">
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                <div class="invalid-feedback">Informe sua senha segura</div>
+            </div>
+            <div class="fs-4 col-1">
+                <i id="see_password" class="bi bi-eye-slash"></i>
+            </div>
         </div>
 
-        <x-validation-errors class="mb-4" />
+        <div class="">
+            <button type="submit" class="btn btn-primary">{{ __('Confirmar') }}</button>
+        </div>
+    </form>
 
-        <form method="POST" action="{{ route('password.confirm') }}">
-            @csrf
-
-            <div>
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" autofocus />
-            </div>
-
-            <div class="flex justify-end mt-4">
-                <x-button class="ml-4">
-                    {{ __('Confirm') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
 </x-guest-layout>
