@@ -7,6 +7,7 @@
 namespace App\Models\AbstractModels;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
 * Class AbstractGroup
@@ -30,6 +31,9 @@ use Illuminate\Database\Eloquent\Model;
 */ 
 abstract class AbstractGroup extends Model
 {
+
+    use SoftDeletes;
+
     /**  
      * The attributes that should be cast to native types.
      * 
@@ -41,8 +45,12 @@ abstract class AbstractGroup extends Model
         'name' => 'string',
         'description' => 'string',
         'max_members' => 'integer',
+        'needs_binaural' => 'boolean',
+        'needs_playlist' => 'boolean',
+        'needs_video' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
         'project_id' => 'integer',
         'weekday_id' => 'integer',
         'status_id' => 'integer'

@@ -7,6 +7,7 @@
 namespace App\Models\AbstractModels;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
 * Class AbstractProject
@@ -27,6 +28,9 @@ use Illuminate\Database\Eloquent\Model;
 */ 
 abstract class AbstractProject extends Model
 {
+
+    use SoftDeletes;
+
     /**  
      * The attributes that should be cast to native types.
      * 
@@ -37,10 +41,12 @@ abstract class AbstractProject extends Model
         'name' => 'string',
         'description' => 'string',
         'contact' => 'string',
+        'tlce_model' => 'string',
         'starts_at' => 'datetime:Y-m-d',
         'ends_at' => 'datetime:Y-m-d',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
         'status_id' => 'integer'
     ];
     

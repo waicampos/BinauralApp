@@ -8,7 +8,8 @@
  
  // use Illuminate\Contracts\Auth\MustVerifyEmail;
  use Illuminate\Database\Eloquent\Factories\HasFactory;
- use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
  use Illuminate\Notifications\Notifiable;
  use Laravel\Sanctum\HasApiTokens;
 
@@ -43,7 +44,7 @@
 abstract class AbstractUser extends Authenticatable
 {
 
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
     
     /**  
      * The attributes that should be cast to native types.
@@ -63,9 +64,10 @@ abstract class AbstractUser extends Authenticatable
         'remember_token' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
         'category_id' => 'integer',
-        'civil_state_id' => 'integer',
-        'status_id' => 'integer'
+        // 'civil_state_id' => 'integer',
+        //'status_id' => 'integer'
     ];
 
     
@@ -75,12 +77,27 @@ abstract class AbstractUser extends Authenticatable
       *
       * @var array<int, string>
       */
-     protected $fillable = [
-         'name',
-         'email',
-         'password',
-     ];
+    //  protected $fillable = [
+    //      'name',
+    //      'email',
+    //      'password',
+    //  ];
+
+
+    /**
+      * The attributes that are guarded from mass assignment.
+      *
+      * @var array<int, string>
+      */
+      protected $guarded = [
+        'id',
+        'email_verified_at',
+        'remember_token',
+        'deleted_at',
+        'category_id'
+    ];
  
+
      /**
       * The attributes that should be hidden for serialization.
       *
@@ -92,20 +109,25 @@ abstract class AbstractUser extends Authenticatable
      ];
     
 
+    protected $attributes = [
+        'category_id' => 1
+    ];
+
+
     public function category()
     {
         return $this->belongsTo('\App\Models\category', 'category_id', 'id');
     }
     
-    public function civilState()
-    {
-        return $this->belongsTo('\App\Models\civilState', 'civil_state_id', 'id');
-    }
+    // public function civilState()
+    // {
+    //     return $this->belongsTo('\App\Models\civilState', 'civil_state_id', 'id');
+    // }
     
-    public function status()
-    {
-        return $this->belongsTo('\App\Models\status', 'status_id', 'id');
-    }
+    // public function status()
+    // {
+    //     return $this->belongsTo('\App\Models\status', 'status_id', 'id');
+    // }
     
     public function playlists()
     {

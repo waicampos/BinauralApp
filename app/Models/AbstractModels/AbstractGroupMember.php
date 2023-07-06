@@ -7,6 +7,7 @@
 namespace App\Models\AbstractModels;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
 * Class AbstractGroupMember
@@ -29,6 +30,9 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 */ 
 abstract class AbstractGroupMember extends Pivot
 {
+
+    use SoftDeletes; 
+    
     /**  
      * Do not automatically manage timestamps by Eloquent
      * 
@@ -46,6 +50,8 @@ abstract class AbstractGroupMember extends Pivot
         'group_id' => 'integer',
         'user_id' => 'integer',
         'authorization' => 'boolean',
+        'reference_name' => 'string',
+        'reference_phone' => 'string',
         'city' => 'string',
         'phone_number' => 'string',
         'weekday_id' => 'integer'

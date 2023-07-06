@@ -156,6 +156,18 @@ export default function Dashboard({ code }) {
 
   return (
     <Container className="d-flex flex-column py-2">
+      <div className="flex-grow-1 my-2">
+        <p>Sua Playlist:</p>
+        <div className="row justify-content-center">
+          {playlist.map(track => (
+              <Track
+                track={track}
+              />
+            ))}
+          </div>
+        <p>Duração Total: </p>
+      </div>
+
       <Form.Control
         type="search"
         placeholder="Search Songs/Artists"
@@ -180,13 +192,7 @@ export default function Dashboard({ code }) {
       {/* <div>
         <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
       </div> */}
-    <div className="flex-grow-1 my-2">
-      {playlist.map(track => (
-          <Track
-            track={track}
-          />
-        ))}
-    </div>
+    
     {/* <form action="/playlist" method="POST"> */}
       
      {/* <input type="hidden" name="X-CSRF-Token" value={csrf_token}/>
@@ -199,7 +205,6 @@ export default function Dashboard({ code }) {
     </Container>
   )
 }
-
 
 if (document.getElementById('dashboard')) {
   ReactDOM.render(<Dashboard />, document.getElementById('dashboard'));

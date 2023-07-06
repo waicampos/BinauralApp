@@ -1,6 +1,8 @@
 ::root {
     /* Sempre as mesmas */
     --primary: #db5c65;
+    --bs-primary: var(--primary);
+    --bs-primary-rgb: var(--primary);
     --danger: #ff0000;
     --success: #7bab6a;
     --secondary: #f1a800;

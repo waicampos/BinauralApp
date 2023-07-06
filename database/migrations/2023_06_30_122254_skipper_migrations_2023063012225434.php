@@ -32,10 +32,12 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('remember_token', 255)->nullable(true);
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
+            $table->timestamp('deleted_at')->nullable();
             $table->tinyInteger('category_id');
-            $table->tinyInteger('civil_state_id')->unsigned();
-            $table->tinyInteger('status_id')->unsigned();
+            // $table->tinyInteger('civil_state_id')->unsigned();
+            //$table->tinyInteger('status_id')->unsigned();
             $table->unique(['cpf'], 'CPF');
+            $table->unique(['email'], 'email');
         });
         Schema::create('categories', function (Blueprint $table) {
             $table->tinyInteger('id')->autoIncrement();
@@ -50,37 +52,43 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('name', 50);
             $table->string('description', 300);
             $table->string('contact', 300);
+            $table->string('tlce_model', 255)->nullable();
             $table->date('starts_at');
             $table->date('ends_at');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
+            $table->timestamp('deleted_at')->nullable();
             $table->tinyInteger('status_id')->unsigned();
         });
         Schema::create('groups', function (Blueprint $table) {
             $table->smallInteger('id')->autoIncrement()->unsigned();
             $table->tinyInteger('number');
-            $table->string('name', 30);
+            $table->string('name', 255);
             $table->text('description');
             $table->tinyInteger('max_members');
             $table->time('hour');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
+            $table->timestamp('deleted_at')->nullable();
+            $table->boolean('needs_playlist');
+            $table->boolean('needs_binaural');
+            $table->boolean('needs_video');
             $table->tinyInteger('project_id')->unsigned();
             $table->tinyInteger('weekday_id')->unsigned();
             $table->tinyInteger('status_id')->unsigned();
-            $table->unique(['number'], 'numero_projeto');
+            $table->unique(['number', 'project_id'], 'number_unique');
         });
         Schema::create('media', function (Blueprint $table) {
             $table->tinyInteger('id')->autoIncrement()->unsigned();
             $table->string('name', 30)->unique();
-            $table->string('description', 200);
-            $table->string('url', 200)->unique();
+            $table->string('description', 255);
+            $table->string('url', 255)->unique();
             $table->tinyInteger('media_type_id')->unsigned();
         });
         Schema::create('files', function (Blueprint $table) {
             $table->smallInteger('id')->autoIncrement()->unsigned();
             $table->string('name', 100);
-            $table->string('url', 200);
+            $table->string('url', 255);
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
             $table->tinyInteger('project_id')->unsigned();
@@ -96,7 +104,7 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('name', 15)->unique();
         });
         Schema::create('playlists', function (Blueprint $table) {
-            $table->string('uri', 200);
+            $table->string('uri', 255);
             $table->timestamp('updated_at');
             $table->integer('user_id')->unique()->unsigned();
         });
@@ -124,11 +132,11 @@ class SkipperMigrations2023063012225434 extends Migration
         });
         Schema::create('scalable_sensations', function (Blueprint $table) {
             $table->tinyInteger('id')->autoIncrement()->unsigned();
-            $table->string('sensacao', 500);
+            $table->string('sensacao', 255);
         });
         Schema::create('feelings', function (Blueprint $table) {
             $table->tinyInteger('id')->autoIncrement()->unsigned();
-            $table->string('sentimento', 200);
+            $table->string('sentimento', 255);
         });
         Schema::create('member_workshops', function (Blueprint $table) {
             $table->mediumInteger('id')->autoIncrement()->unsigned();
@@ -163,13 +171,14 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->tinyInteger('wokshop_status_id')->unsigned();
         });
         Schema::create('responsible_adults', function (Blueprint $table) {
-            $table->string('fullname', 300);
+            $table->string('fullname', 255);
             $table->string('phone_number', 30);
             $table->smallInteger('group_member_id')->unique()->unsigned();
         });
         Schema::create('weekdays', function (Blueprint $table) {
             $table->tinyInteger('id')->unsigned();
             $table->string('name', 15)->unique();
+            $table->string('portuguese', 15)->unique();
             $table->primary(['id']);
         });
         Schema::create('civil_states', function (Blueprint $table) {
@@ -177,7 +186,7 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('name', 15)->unique();
         });
         Schema::create('tlces', function (Blueprint $table) {
-            $table->string('url', 200);
+            $table->string('url', 255);
             $table->timestamp('sent_at');
             $table->smallInteger('group_member_id')->unique()->unsigned();
         });
@@ -213,7 +222,7 @@ class SkipperMigrations2023063012225434 extends Migration
         Schema::create('questionaires', function (Blueprint $table) {
             $table->tinyInteger('id')->autoIncrement()->unsigned();
             $table->string('name', 30);
-            $table->string('default_question', 200);
+            $table->string('default_question', 255);
             $table->tinyInteger('default_interval');
             $table->dateTime('updated_at');
         });
@@ -254,9 +263,12 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->smallInteger('group_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->boolean('authorization');
-            $table->string('city', 100);
-            $table->string('phone_number', 20);
+            $table->string('city', 255);
+            $table->string('phone_number', 30);
+            $table->string('reference_name', 255);
+            $table->string('reference_phone', 30);
             $table->time('preferred_hour');
+            $table->timestamp('deleted_at')->nullable();
             $table->tinyInteger('weekday_id')->unsigned();
         });
         Schema::create('user_indicator_outros', function (Blueprint $table) {
@@ -313,12 +325,12 @@ class SkipperMigrations2023063012225434 extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('category_id')->references('id')->on('categories');
         });
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('civil_state_id')->references('id')->on('civil_states');
-        });
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('status_id')->references('id')->on('status')->onDelete('restrict')->onUpdate('restrict');
-        });
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->foreign('civil_state_id')->references('id')->on('civil_states');
+        // });
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->foreign('status_id')->references('id')->on('status')->onDelete('restrict')->onUpdate('restrict');
+        // });
         Schema::table('projects', function (Blueprint $table) {
             $table->foreign('status_id')->references('id')->on('status')->onDelete('restrict')->onUpdate('restrict');
         });
@@ -601,6 +613,11 @@ class SkipperMigrations2023063012225434 extends Migration
         if (Schema::hasTable('media')) {
             Schema::table('media', function (Blueprint $table) {
                 $table->dropForeign(['media_type_id']);
+            });
+        }
+        if (Schema::hasTable('groups')) {
+            Schema::table('groups', function (Blueprint $table) {
+                $table->dropUnique('number_unique');
             });
         }
         if (Schema::hasTable('groups')) {

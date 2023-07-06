@@ -154,6 +154,11 @@ class CadastroController extends Controller
         // Ou, fazer isto no construtor? Sim.. acho que no construtor...
         $user = Auth::user();
 
+        /** Checa se usuário já participa de uma oficina */
+        if ($user->category->id == 2) {
+            return redirect()->back()->with('msg', "Você já está participando de uma oficina ativa! Confira sua página inicial");
+        }
+
         $dto = new UserDTO($user);
         $dto->needs_update = false;
 
@@ -168,13 +173,7 @@ class CadastroController extends Controller
         // $project->needs_playlist = $group->project->has_binaural; // Este campo ainda não existe na base de dados
         $groupDTO->needs_playlist = true;
 
-        $weekdays = [];
-        foreach(Weekday::orderBy('id')->get() as $weekday) {
-            $weekdays[$weekday->id] = $weekday->name;
-        }
-
-        unset($weekdays[1]);
-        unset($weekdays[7]);
+        $weekdays = Weekday::orderBy('id')->get();
 
         //ksort($weekdays);
         // O ideal seria pegar o texto do banco de dados...
@@ -193,6 +192,8 @@ class CadastroController extends Controller
 
     public function store (Request $request) 
     {
+
+        
 
         //dd($request);
 
@@ -230,86 +231,98 @@ class CadastroController extends Controller
         $active_group = App::config('cadastro_ativo_grupo_id');
         $group = Group::findOrFail($active_group);
 
+        
+
         $groupMember = DB::transaction(function () use ($request, $user, $group) {  
 
-        $groupMember = new GroupMember();
+            // Tratando a hora
+            $preferred_hour = new Carbon($request->hour.':'.$request->minute.':00');
+            $preferred_hour = $preferred_hour->toTimeString();
+
+            $groupMember = new GroupMember();
+            
+            $groupMember->group_id = $group->id;
+            $groupMember->user_id = $user->id;
+            $groupMember->authorization = $request->authorization;
+            $groupMember->city = $request->city;
+            $groupMember->phone_number = $request->phone_number;
+            $groupMember->weekday_id = $request->weekday_id;
+            $groupMember->preferred_hour = $preferred_hour;
+            $groupMember->reference_name = $request->reference_name;
+            $groupMember->reference_phone = $request->reference_phone;
+
+            $groupMember->save();
+
+            $groupMember = GroupMember::where('user_id', $user->id)->first();
+
+            //var_dump($groupMember);
+
+            // Inserindo na playlist
+            // Tem que vir como playlist_uri
+            DB::table('playlists')->insert([
+                'user_id' => $user->id,
+                'uri' => $request->playlist_uri,
+                'updated_at' => Carbon::now()
+            ]);
+
+
+            if ($user->age() < 18) {	
+                DB::table('responsible_adults')->insert([
+                    'group_member_id' => $groupMember->id,
+                    'phone_number' => $request->responsavel_nome,
+                    'fullname' => $request->responsavel_phone
+                ]);
+            }
+
+            // Inserindo indicadores para o projeto
+            // AINDA nÂO FOI CRIADA ESSA TABELA!
+            // id	groupMember_id	indicator_id	option_id
+            // Por enquanto, vou fazer só do user mesmo....
+            // foreach ($user->indicators as $indicator) {
+            //     $this->indicators[$indicator->indicator->id] = [
+            //         'name' => $indicator->indicator->name,
+            //         'option_id' => $indicator->option->id,
+            //         'option_name' => $indicator->option->name,
+            //     ];
+            // }
+            foreach($user->indicators as $indicator) {
+                DB::table('group_member_indicators')->insert([
+                    'group_member_id' => $groupMember->id,
+                    'indicator_id' => $indicator->indicator->id,
+                    'option_id' => $indicator->option->id
+                ]);
+            }
+
+            if ($groupMember->authorization) {
+                $tlce_path = $this->gerar_tlce($group, $user);
+
+                $person = new stdClass();
+                $person->name = $user->name();
+                $person->email = $user->email;
+                Mail::to($person)->send(new TLCEMail($tlce_path));
         
-        $groupMember->group_id = $group->id;
-        $groupMember->user_id = $user->id;
-        $groupMember->authorization = $request->authorization;
-        $groupMember->city = $request->city;
-        $groupMember->phone_number = $request->phone_number;
-        $groupMember->weekday_id = $request->weekday_id;
-        $groupMember->preferred_hour = $request->preferred_hour;
+                // TLCE
+                // Chegou a hora de mexer com o OOXML
+                // E criar um template e salvar coisas no storage
+                // Oba! Vamos lá!
+        
+                // Será que aqui é o momento ideal de fazer isso? 
+        
+                DB::table('tlces')->insert([
+                    'group_member_id' => $groupMember->id,
+                    'url' => $tlce_path,
+                    'sent_at' => Carbon::now()
+                ]);
 
-        $groupMember->save();
-
-        $groupMember = GroupMember::where('user_id', $user->id)->first();
-
-        //var_dump($groupMember);
-
-        // Inserindo na playlist
-        // Tem que vir como playlist_uri
-        DB::table('playlists')->insert([
-            'user_id' => $user->id,
-            'uri' => $request->playlist_uri,
-            'updated_at' => Carbon::now()
-        ]);
-
-
-        if ($user->age() < 18) {	
-            DB::table('responsible_adults')->insert([
-                'group_member_id' => $groupMember->id,
-                'phone_number' => $request->responsavel_nome,
-                'fullname' => $request->responsavel_phone
-            ]);
-        }
-
-        // Inserindo indicadores para o projeto
-        // AINDA nÂO FOI CRIADA ESSA TABELA!
-        // id	groupMember_id	indicator_id	option_id
-        // Por enquanto, vou fazer só do user mesmo....
-        // foreach ($user->indicators as $indicator) {
-        //     $this->indicators[$indicator->indicator->id] = [
-        //         'name' => $indicator->indicator->name,
-        //         'option_id' => $indicator->option->id,
-        //         'option_name' => $indicator->option->name,
-        //     ];
-        // }
-        foreach($user->indicators as $indicator) {
-            DB::table('group_member_indicators')->insert([
-                'group_member_id' => $groupMember->id,
-                'indicator_id' => $indicator->indicator->id,
-                'option_id' => $indicator->option->id
-            ]);
-        }
-
-        if ($groupMember->authorization) {
-            $tlce_path = $this->gerar_tlce($group, $user);
-
-            $person = new stdClass();
-            $person->name = $user->name();
-            $person->email = $user->email;
-            Mail::to($person)->send(new TLCEMail($tlce_path));
-    
-            // TLCE
-            // Chegou a hora de mexer com o OOXML
-            // E criar um template e salvar coisas no storage
-            // Oba! Vamos lá!
-    
-            // Será que aqui é o momento ideal de fazer isso? 
-    
-            DB::table('tlces')->insert([
-                'group_member_id' => $groupMember->id,
-                'url' => $tlce_path,
-                'sent_at' => Carbon::now()
-            ]);
-    
-        }
+                /** Muda a categoria do usuário para indicar que ele agora participa de uma oficina  */
+                $user->category_id = 2;
+                $user->save();
+        
+            }
 
     
 
-    }, 5);
+        }, 5);
 
         return redirect('/');
 

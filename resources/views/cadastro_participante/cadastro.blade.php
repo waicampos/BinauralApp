@@ -35,6 +35,8 @@
             @if ($user->needs_update)
             <span class="step"></span>
             @endif
+            
+            <span class="step"></span>
 
             <span class="step"></span>
 
@@ -47,6 +49,8 @@
             @if ($group->needs_playlist)
             <span class="step"></span>
             @endif
+
+
         <!-- <span class="step"></span> -->
         </div>
 
@@ -77,6 +81,7 @@
         --}}
 
 
+        <!-- Step #1: Atualizar Indicadores -->
         @if ($user->needs_update)
             <div class="tab">
                 <fieldset class="">
@@ -93,13 +98,10 @@
 
           
 
-
-        <!-- Step 2: cidade, telefone, hora preferida -->
-        <div class="tab">
-            
+        <!-- Step #2: cidade, telefone, hora preferida -->
+        <div class="tab">           
             <fieldset class="">
                 <legend></legend>
-
                 <div>
                     <label for="city" class="form-label">Cidade:</label>
                     <input type="text" list="local-cities" name="city" id="city" class="form-control" value="{{ old('city') }}" placeholder="Cidade em que você mora" autocomplete="address-level2" required>
@@ -129,8 +131,8 @@
                     <label for="weekday_id" class="form-label">Qual seu dia da semana preferido para participar da oficina?</label>
                     <select name="weekday_id" id="weekday_id" required>
                         <option value="" selected disabled>Selecione um dia</option>
-                        @foreach($weekdays as $id => $day) 
-                        <option value="{{$id}}">{{$day}}</option>
+                        @foreach($weekdays as $day) 
+                        <option value="{{$day->id}}">{{ucfirst($day->portuguese)}}</option>
                         @endforeach
                     </select>
                     <x-input-error :messages="$errors->get('weekday_id')" class="mt-2" />
@@ -138,21 +140,62 @@
                 </div>   
 
                 <div>
+                    <label for="preferred_hour" class="form-label">Seu horário preferido para participar da oficina:</label>
+
+                    <select name="hour" id="hour" required>
+                        <option value="" selected disabled></option>
+                        @foreach(range(8, 17, 1) as $hour) 
+                            <option value="{{$hour}}">{{$hour}}</option>
+                        @endforeach
+                    </select>
+                    <span class="">:</span>
+
+                    <select name="minute" id="minute" required>
+                        <option value="" selected disabled></option>
+                        <option value="00">00</option>
+                        <option value="30">30</option>
+                    </select>
+                    <!-- <span class="">m</span> -->
+
+                    <!-- <input type="" min="08:00" max="17:00" step="1800" name="preferred_hour" id="preferred_hour" class="form-control" value="{{ old('preferred_hour') }}" required>
+                    <x-input-error :messages="$errors->get('preferred_hour')" class="mt-2" />
+                    <div class="error invalid-feedback">Insira a sua hora preferida</div>
+
                     <label for="preferred_hour" class="form-label">Hora preferida para participar da oficina:</label>
                     <input type="time" min="08:00" max="17:00" step="1800" name="preferred_hour" id="preferred_hour" class="form-control" value="{{ old('preferred_hour') }}" required>
                     <x-input-error :messages="$errors->get('preferred_hour')" class="mt-2" />
-                    <div class="error invalid-feedback">Insira a sua hora preferida</div>
+                    <div class="error invalid-feedback">Insira a sua hora preferida</div> -->
                 </div>   
 
             </fieldset>
         </div>
 
+        <!-- Step #3: Contato para emergência -->
+        <div class="tab">
+            <fieldset class="">
+                <legend>Contato para emergência</legend>
+                <!--  -->
+                <div>
+                    <label for="reference_name" class="form-label">Nome de uma pessoa para contato:</label>
+                    <input type="text" name="reference_name" id="reference_name" class="form-control" value="{{ old('reference_name') }}" placeholder="Nome da pessoa para contato" required>
+                    <x-input-error :messages="$errors->get('reference_name')" class="mt-2" />
+                    <div class="error invalid-feedback">Insira um nome válido</div>
+                </div>
+                <div>
+                    <label for="reference_phone" class="form-label">Telefone com DDD:</label>
+                    <input type="text" name="reference_phone" id="reference_phone" class="form-control" value="{{ old('reference_phone') }}" placeholder="DDD + Número" autocomplete="tel-national" required>
+                    <x-input-error :messages="$errors->get('reference_phone')" class="mt-2" />
+                    <div class="error invalid-feedback">Insira um número de telefone: DDD + Número</div>
+                </div>     
+            </fieldset>
+        </div>
 
-        <!-- Step 3: Nome e telefone do responsável se menor de idade  -->
+
+        <!-- Step #4: Nome e telefone do responsável se menor de idade  -->
        @if ($user->age < 18)
         <div class="tab">
             <fieldset class="">
-                <legend>Autorização de Uso de Dados</legend>
+                <legend>Dados do/a responsável legal</legend>
                 <!--  -->
                 <div>
                     <label for="responsavel_nome" class="form-label">Nome do/a responsável:</label>
@@ -169,9 +212,10 @@
             </fieldset>
         </div>
         @endif
+         
 
 
-        <!-- Step 4: TLCE -->
+        <!-- Step #5: TLCE -->
         <div class="tab">
             
             <fieldset class="">
@@ -232,13 +276,15 @@
                         <div class="form-group my-2">
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="authorization" id="authorization_true" value="1" required {{ old('authorization') === 1 ? "checked" : "" }}>
-                                <label for="autorizacao_1"><strong>Concordo</strong> com o Termo e AUTORIZO o uso de meus dados para os fins descritos acima. <span class="info-adicional">(Você receberá o Termo de Consentimento acima por email)</span> </label>   
+                                <input class="form-check-input" type="radio" onclick="authInfo(true)" name="authorization" id="authorization_true" value="1" required {{ old('authorization') === 1 ? "checked" : "" }}>
+                                <label for="autorizacao_1"><strong>Concordo</strong> com o Termo e AUTORIZO o uso de meus dados para os fins descritos acima. </label>
+                                <div id="auth-true-info" class="d-none">Você receberá o Termo de Consentimento acima por email. Não esqueça de trazer assinado no dia da primeira oficina!</div> 
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="authorization" id="authorization_false" value="0" required {{ old('authorization') === 1 ? "checked" : "" }}>
-                                <label for="autorizacao_0"> <strong>NÃO concordo</strong> em autorizar o uso de meus dados para pesquisa, MAS desejo participar das Oficinas. <span class="info-adicional">(Seus dados não serão utilizados no projeto)</span></label>   
+                                <input class="form-check-input" type="radio" onclick="authInfo(false)" name="authorization" id="authorization_false" value="0" required {{ old('authorization') === 1 ? "checked" : "" }}>
+                                <label for="autorizacao_0"> <strong>NÃO concordo</strong> em autorizar o uso de meus dados para pesquisa, MAS desejo participar das Oficinas.</label>   
+                                <div id="auth-false-info" class="d-none">Seus dados não serão utilizados</div> 
                             </div>
 
                         </div>
@@ -253,7 +299,7 @@
 
 
         @if ($group->needs_playlist)
-        <!-- Playlist -->
+        <!-- Step #6: Playlist -->
         <div class="tab">
             
             <fieldset class="">
@@ -285,6 +331,24 @@
 
 
     <script>
+
+
+        /** Mostrando info do termo de autorização */
+        function authInfo($auth) {
+            let infoAuthTrue = document.querySelector('#auth-true-info');
+            let infoAuthFalse = document.querySelector('#auth-false-info');
+            if ($auth) {
+                if (!infoAuthFalse.classList.contains('d-none')) {
+                    infoAuthFalse.classList.add('d-none');
+                }
+                infoAuthTrue.classList.remove('d-none');
+            } else {
+                if (!infoAuthTrue.classList.contains('d-none')) {
+                    infoAuthTrue.classList.add('d-none');
+                }
+                infoAuthFalse.classList.remove('d-none');
+            }
+        }
 
         // Preciso pegar o valor de cada current tab validation e mudar ela....
 

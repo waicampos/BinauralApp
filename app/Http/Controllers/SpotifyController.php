@@ -11,7 +11,7 @@ use SpotifyWebAPI;
 class SpotifyController extends Controller
 {
 
-    private $CLIENT_ID = '2ddc65eaba3a4e2d8f474afbab907516';
+    private $CLIENT_ID = '2ddc65eaba3a4e2d8f474afbab907516'; 
     private $CLIENT_SECRET = '691e57f638f14d43b8a1c70fe58ea9c7';
     private $CALLBACK_URL = 'http://localhost:8000/spotify/callback';
 

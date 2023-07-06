@@ -14,30 +14,18 @@ class UserRelatedSeeder extends Seeder
     public function run(): void
     { 
 
-        DB::table('civil_states')->delete();
         DB::table('categories')->delete();
         DB::table('withdraw_reasons')->delete();
         DB::table('roles')->delete();
-
-            
-        DB::table('civil_states')->insert([
-            ['id' => 1, 'name' => 'solteiro/a'],
-            ['id' => 2, 'name' => 'casado/a'],
-            ['id' => 3, 'name' => 'união estável'],
-            ['id' => 4, 'name' => 'divorciado/a'],
-            ['id' => 5, 'name' => 'viúvo/a']
-        ]);
     
-  
         DB::table('roles')->insert([
-            ['id' => 1, 'name' => 'coordenador'],
-            ['id' => 2, 'name' => 'professor'],
-            ['id' => 3, 'name' => 'técnico'],
+            ['id' => 1, 'name' => 'coordenador/a'],
+            ['id' => 2, 'name' => 'professor/a'],
+            ['id' => 3, 'name' => 'técnico/a'],
             ['id' => 4, 'name' => 'bolsista'],
-            ['id' => 5, 'name' => 'estagiário'],
-            ['id' => 6, 'name' => 'voluntário']
+            ['id' => 5, 'name' => 'estagiário/a'],
+            ['id' => 6, 'name' => 'voluntário/a']
         ]);
-  
   
         DB::table('withdraw_reasons')->insert([
             ['id' => 1, 'name' => 'falta de tempo'],
@@ -47,15 +35,13 @@ class UserRelatedSeeder extends Seeder
             ['id' => 5, 'name' => 'incompatibilidade com o projeto'],
             ['id' => 6, 'name' => 'outro'],
         ]);
-            
 
         DB::table('categories')->insert([
             ['id' => 1, 'name' => 'user'],
-            ['id' => 2, 'name' => 'member'],
+            ['id' => 2, 'name' => 'group_member'],
             ['id' => 3, 'name' => 'team'],
             ['id' => 4, 'name' => 'admin']
         ]);
-
         
     }
 

@@ -8,7 +8,7 @@ class App extends \App\Models\AbstractModels\AbstractApp
 
     public static function config ($config_name) 
     {
-        return DB::table('config')->select('value')->where('name', $config_name)->first()->value;
+        return DB::table('configs')->select('value')->where('name', $config_name)->first()->value;
     }
 
 }

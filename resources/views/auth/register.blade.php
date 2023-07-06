@@ -373,13 +373,12 @@
 
 
 
-
         // Validate CPF
         // Retirada de: {site que não lembro}
         // Para entender a regra, ver Macoratti
         function validateCPF(cpf) {	
 
-            cpf = cpf.replace(/[^\d]+/g,'');	
+            //cpf = cpf.replace(/[^\d]+/g,'');	
             if(cpf == '') return false;	
 
             // Elimina CPFs invalidos conhecidos	
@@ -517,6 +516,7 @@
                 return false;
             }
             if (input.name === 'cpf') {
+                input.value = input.value.replace(/[^\d]+/g,'');
                 return validateCPF(input.value);
             } 
             if (input.name === 'password') {

@@ -40,8 +40,11 @@ abstract class AbstractWeekday extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string'
+        'name' => 'string',
+        'portuguese' => 'string'
     ];
+
+    protected $fillable = [];
     
     public function groups()
     {

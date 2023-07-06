@@ -16,6 +16,23 @@ class GeneralConfigSeeder extends Seeder
     public function run(): void
     {
 
+        DB::table('apps')->delete();
+        DB::table('status')->delete();
+        DB::table('weekdays')->delete();
+        DB::table('file_types')->delete();
+        DB::table('media_types')->delete();
+        DB::table('configs')->delete();
+
+        DB::table('apps')->insert([
+            ['id' => 1, 'name' => 'Bi-Me', 'version' => '0.1'],
+        ]);
+
+        DB::table('configs')->insert([
+            ['name' => 'app_name', 'value' => 'Bi-Me'],
+            ['name' => 'app_version', 'value' => '0.1'],
+            ['name' => 'cadastro_ativo_grupo_id', 'value' => 1],
+        ]);
+
         DB::table('status')->insert([
             ['id' => 1, 'name' => 'ativo'],
             ['id' => 2, 'name' => 'inativo'],
@@ -26,13 +43,13 @@ class GeneralConfigSeeder extends Seeder
   
 
         DB::table('weekdays')->insert([
-            ['id' => 1, 'name' => "sunday"],
-            ['id' => 2, 'name' => "monday"],
-            ['id' => 3, 'name' => "tuesday"],
-            ['id' => 4, 'name' => "wednesday"],
-            ['id' => 5, 'name' => "thursday"],
-            ['id' => 6, 'name' => "friday"],
-            ['id' => 7, 'name' => "saturday"]
+            //['id' => 1, 'name' => "sunday", 'portuguese' => 'domingo'],
+            ['id' => 1, 'name' => "monday", 'portuguese' => 'segunda-feira'],
+            ['id' => 2, 'name' => "tuesday", 'portuguese' => 'terça-feira'],
+            ['id' => 3, 'name' => "wednesday", 'portuguese' => 'quarta-feira'],
+            ['id' => 4, 'name' => "thursday", 'portuguese' => 'quinta-feira'],
+            ['id' => 5, 'name' => "friday", 'portuguese' => 'sexta-feira'],
+            //['id' => 7, 'name' => "saturday", 'portuguese' => 'sábado']
         ]);
   
          
@@ -50,13 +67,8 @@ class GeneralConfigSeeder extends Seeder
             ['id' => 3, 'name' => 'music'],
             ['id' => 4, 'name' => 'image']
         ]);
-    
-  
-        // DB::table('reasons')->insert(
-        //     [
-            
-        // ]);
-    
+
+        
   
     }
 }

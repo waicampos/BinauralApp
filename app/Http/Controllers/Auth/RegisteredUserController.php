@@ -35,9 +35,7 @@ class RegisteredUserController extends Controller
      * 
      */
     public function create(): View
-    {
-
-       
+    {       
         // $request->session()->flush();
 
         // Pegar os indicadores do App

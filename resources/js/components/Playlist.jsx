@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Dashboard from './Dashboard'
 import Login from './Login'
-import './app.css';
+import './player.css';
 import ReactDOM from 'react-dom';
 
 
