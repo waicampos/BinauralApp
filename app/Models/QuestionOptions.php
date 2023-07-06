@@ -1,14 +1,13 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Questionaire extends Model
+class QuestionOptions extends Model
 {
-
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     /**  
      * Do not automatically manage timestamps by Eloquent
@@ -24,16 +23,15 @@ class Questionaire extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string',
-        'description' => 'string'
+        'question_id' => 'integer',
+        'text' => 'string'
     ];
     
-
-    public function questions()
+    public function question()
     {
-        return $this->belongsToMany('\App\Models\questionaire', 'questionaire_questions');
+        return $this->belongsTo('\App\Models\question', 'question_id', 'id');
     }
 
 
-
 }
+    

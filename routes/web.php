@@ -75,6 +75,9 @@ Route::get('/teste', function () {
 Route::get('/playlist', function () {
     return view('cadastro_participante.playlist');
 });
+Route::get('/player', function () {
+    return view('player');
+});
 
 
 require __DIR__.'/auth.php';

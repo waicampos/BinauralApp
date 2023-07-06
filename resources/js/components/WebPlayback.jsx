@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import delta from "../../../public/wav/zenmix-delta.wav"
+//import delta from "../../../public/wav/zenmix-delta.wav"
 //import "./binaural.js"
 
 const track = {
@@ -27,7 +27,8 @@ function WebPlayback(props) {
     const [playerId, setPlayerId] = useState(undefined);
     
 
-    const wave = new Audio(delta)
+    //const wave = new Audio(delta)
+    const wave = new Audio()
     function toogleWave() {
         if(wavePlayer == 'paused') {
             wave.play();  
@@ -69,6 +70,8 @@ function WebPlayback(props) {
                 getOAuthToken: cb => { cb(props.token); },
                 volume: 0.5
             });
+
+            console.log(player);
 
             setPlayer(player);
 

@@ -130,22 +130,23 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('name', 50);
             $table->tinyInteger('indicator_id')->unsigned();
         });
-        Schema::create('scalable_sensations', function (Blueprint $table) {
-            $table->tinyInteger('id')->autoIncrement()->unsigned();
-            $table->string('sensacao', 255);
-        });
-        Schema::create('feelings', function (Blueprint $table) {
-            $table->tinyInteger('id')->autoIncrement()->unsigned();
-            $table->string('sentimento', 255);
-        });
-        Schema::create('member_workshops', function (Blueprint $table) {
-            $table->mediumInteger('id')->autoIncrement()->unsigned();
-            $table->time('inicio');
-            $table->time('fim');
-            $table->boolean('interrupcao');
-            $table->timestamp('created_at');
-            $table->smallInteger('participante_grupo_id');
-        });
+        // Schema::create('scalable_sensations', function (Blueprint $table) {
+        //     $table->tinyInteger('id')->autoIncrement()->unsigned();
+        //     $table->string('sensacao', 255);
+        // });
+        // Schema::create('feelings', function (Blueprint $table) {
+        //     $table->tinyInteger('id')->autoIncrement()->unsigned();
+        //     $table->string('sentimento', 255);
+        // });
+        // Schema::create('member_workshops', function (Blueprint $table) {
+        //     $table->mediumInteger('id')->autoIncrement()->unsigned();
+        //     $table->time('started_at');
+        //     $table->time('finished_at');
+        //     $table->boolean('was_interrupted');
+        //     $table->timestamp('created_at');
+        //     $table->timestamp('deleted_at')->nullable();
+        //     $table->smallInteger('group_member_id');
+        // });
         Schema::create('non_working_periods', function (Blueprint $table) {
             $table->tinyInteger('id')->autoIncrement()->unsigned();
             $table->date('start_date');
@@ -181,10 +182,10 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('portuguese', 15)->unique();
             $table->primary(['id']);
         });
-        Schema::create('civil_states', function (Blueprint $table) {
-            $table->tinyInteger('id')->autoIncrement()->unsigned();
-            $table->string('name', 15)->unique();
-        });
+        // Schema::create('civil_states', function (Blueprint $table) {
+        //     $table->tinyInteger('id')->autoIncrement()->unsigned();
+        //     $table->string('name', 15)->unique();
+        // });
         Schema::create('tlces', function (Blueprint $table) {
             $table->string('url', 255);
             $table->timestamp('sent_at');
@@ -199,10 +200,10 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->tinyInteger('id')->autoIncrement()->unsigned();
             $table->string('name', 255);
         });
-        Schema::create('worshop_sensations', function (Blueprint $table) {
-            $table->smallInteger('id')->autoIncrement()->unsigned();
-            $table->tinyInteger('escala');
-        });
+        // Schema::create('worshop_sensations', function (Blueprint $table) {
+        //     $table->smallInteger('id')->autoIncrement()->unsigned();
+        //     $table->tinyInteger('escala');
+        // });
         Schema::create('configs', function (Blueprint $table) {
             $table->tinyInteger('id')->autoIncrement()->unsigned();
             $table->string('name', 30)->unique();
@@ -214,18 +215,18 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('description', 300)->nullable(true);
             $table->dateTime('inserted_at')->nullable(true);
         });
-        Schema::create('long_questionaires', function (Blueprint $table) {
-            $table->tinyInteger('id')->autoIncrement()->unsigned();
-            $table->string('name', 30);
-            $table->tinyInteger('workshop_interval')->unsigned();
-        });
-        Schema::create('questionaires', function (Blueprint $table) {
-            $table->tinyInteger('id')->autoIncrement()->unsigned();
-            $table->string('name', 30);
-            $table->string('default_question', 255);
-            $table->tinyInteger('default_interval');
-            $table->dateTime('updated_at');
-        });
+        // Schema::create('long_questionaires', function (Blueprint $table) {
+        //     $table->tinyInteger('id')->autoIncrement()->unsigned();
+        //     $table->string('name', 30);
+        //     $table->tinyInteger('workshop_interval')->unsigned();
+        // });
+        // Schema::create('questionaires', function (Blueprint $table) {
+        //     $table->tinyInteger('id')->autoIncrement()->unsigned();
+        //     $table->string('name', 30);
+        //     $table->string('default_question', 255);
+        //     $table->tinyInteger('default_interval');
+        //     $table->dateTime('updated_at');
+        // });
         Schema::create('sessao_apps', function (Blueprint $table) {
             $table->bigInteger('id')->autoIncrement()->unsigned();
             $table->timestamp('created_at')->nullable(true);
@@ -276,11 +277,11 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('answer', 255);
             $table->primary(['user_indicator_id']);
         });
-        Schema::create('group_questionaire', function (Blueprint $table) {
-            $table->smallInteger('id')->autoIncrement()->unsigned();
-            $table->tinyInteger('questionaire_id')->unsigned();
-            $table->smallInteger('group_id')->unsigned();
-        });
+        // Schema::create('group_questionaire', function (Blueprint $table) {
+        //     $table->smallInteger('id')->autoIncrement()->unsigned();
+        //     $table->tinyInteger('questionaire_id')->unsigned();
+        //     $table->smallInteger('group_id')->unsigned();
+        // });
         Schema::create('group_member_workshop', function (Blueprint $table) {
             $table->smallInteger('id')->autoIncrement()->unsigned();
             $table->smallInteger('workshop_id')->unsigned();
@@ -322,6 +323,12 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->tinyInteger('app_id')->unsigned();
             $table->primary(['indicator_id','app_id']);
         });
+
+
+
+        
+        /** CHAVES  */
+
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('category_id')->references('id')->on('categories');
         });
@@ -434,10 +441,10 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('restrict')->onUpdate('restrict');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
         });
-        Schema::table('group_questionaire', function (Blueprint $table) {
-            $table->foreign('questionaire_id')->references('id')->on('questionaires')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreign('group_id')->references('id')->on('groups')->onDelete('restrict')->onUpdate('restrict');
-        });
+        // Schema::table('group_questionaire', function (Blueprint $table) {
+        //     $table->foreign('questionaire_id')->references('id')->on('questionaires')->onDelete('restrict')->onUpdate('restrict');
+        //     $table->foreign('group_id')->references('id')->on('groups')->onDelete('restrict')->onUpdate('restrict');
+        // });
         Schema::table('group_member_workshop', function (Blueprint $table) {
             $table->foreign('workshop_id')->references('id')->on('workshops')->onDelete('restrict')->onUpdate('restrict');
             $table->foreign('group_member_id')->references('id')->on('group_member')->onDelete('restrict')->onUpdate('restrict');
@@ -470,10 +477,10 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->dropForeign(['workshop_id']);
             $table->dropForeign(['group_member_id']);
         });
-        Schema::table('group_questionaire', function (Blueprint $table) {
-            $table->dropForeign(['questionaire_id']);
-            $table->dropForeign(['group_id']);
-        });
+        // Schema::table('group_questionaire', function (Blueprint $table) {
+        //     $table->dropForeign(['questionaire_id']);
+        //     $table->dropForeign(['group_id']);
+        // });
         Schema::table('group_member', function (Blueprint $table) {
             $table->dropForeign(['group_id']);
             $table->dropForeign(['user_id']);
@@ -662,7 +669,7 @@ class SkipperMigrations2023063012225434 extends Migration
         Schema::dropIfExists('user_indicators');
         Schema::dropIfExists('group_indicator');
         Schema::dropIfExists('group_member_workshop');
-        Schema::dropIfExists('group_questionaire');
+        // Schema::dropIfExists('group_questionaire');
         Schema::dropIfExists('user_indicator_outros');
         Schema::dropIfExists('group_member');
         Schema::dropIfExists('group_non_working_period');
@@ -671,8 +678,8 @@ class SkipperMigrations2023063012225434 extends Migration
         Schema::dropIfExists('project_team');
         Schema::dropIfExists('dados_user_apps');
         Schema::dropIfExists('sessao_apps');
-        Schema::dropIfExists('questionaires');
-        Schema::dropIfExists('long_questionaires');
+        // Schema::dropIfExists('questionaires');
+        // Schema::dropIfExists('long_questionaires');
         Schema::dropIfExists('updates');
         Schema::dropIfExists('configs');
         Schema::dropIfExists('worshop_sensations');

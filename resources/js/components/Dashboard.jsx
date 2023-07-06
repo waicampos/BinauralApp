@@ -200,7 +200,7 @@ export default function Dashboard({ code }) {
      <button className="btn btn-secondary">Salvar Playlist</button>
     </form> */}
 
-    <button className="btn btn-secondary" onClick={() => { salvarPlaylist() }}>Salvar playlist</button>
+    <button className="btn btn-primary" onClick={() => { salvarPlaylist() }}>Salvar playlist</button>
     {/* Botão de Salvar a playlist para fazer requisição ao php, que irá criar a playlist, incluir a lista de músicas e salvar o a uri da playlist associada ao usuário */}
     </Container>
   )

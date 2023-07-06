@@ -15,8 +15,8 @@ class ProjetoTesteSeeder extends Seeder
     public function run(): void
     {
 
-        // DB::table('projects')->delete();
-        // DB::table('groups')->delete();
+        DB::table('projects')->delete();
+        DB::table('groups')->delete();
 
         DB::table('projects')->insert([
             [
@@ -46,6 +46,7 @@ class ProjetoTesteSeeder extends Seeder
         ]);
 
         DB::table('groups')->insert([
+            'id' => 1,
             'number' => 1,
             'name' => 'Grupo de Teste - Binaural & Música',
             'description' => '',
@@ -62,6 +63,7 @@ class ProjetoTesteSeeder extends Seeder
         ]);
 
         DB::table('groups')->insert([
+            'id' => 2,
             'number' => 2,
             'name' => 'Grupo de Teste - SÓ Binaural',
             'description' => '',
@@ -78,6 +80,7 @@ class ProjetoTesteSeeder extends Seeder
         ]);
 
         DB::table('groups')->insert([
+            'id' => 3,
             'number' => 3,
             'name' => 'Grupo de Teste - SÓ Música',
             'description' => '',
@@ -94,6 +97,7 @@ class ProjetoTesteSeeder extends Seeder
         ]);
 
         DB::table('groups')->insert([
+            'id' => 4,
             'number' => 4,
             'name' => 'Grupo de Teste - SEM Binaural & SEM Música',
             'description' => '',
@@ -110,6 +114,7 @@ class ProjetoTesteSeeder extends Seeder
         ]);
 
         DB::table('groups')->insert([
+            'id' => 5,
             'number' => 1,
             'name' => 'Grupo de Teste - Grupo Ativo em Projeto Inativo?',
             'description' => '',
@@ -126,6 +131,7 @@ class ProjetoTesteSeeder extends Seeder
         ]);
 
         DB::table('groups')->insert([
+            'id' => 6,
             'number' => 5,
             'name' => 'Grupo de Teste - Grupo Inativo em Projeto Ativo',
             'description' => '',
@@ -139,6 +145,10 @@ class ProjetoTesteSeeder extends Seeder
             'project_id' => 1,
             'weekday_id' => 5,
             'status_id' => 2,
+        ]);
+
+        $this->call([
+            QuestionsSeeder::class,
         ]);
 
     }
