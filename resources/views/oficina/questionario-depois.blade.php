@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <form action="{{ route('questionario_final') }}" method="post">
+    <form action="{{ route('questionario_fim') }}" method="post">
         @csrf
         <fieldset class="my-3">
             <legend>Como você se sente depois da experiência?</legend>
@@ -42,7 +42,7 @@
             <div class="form-check">
                 <input type="radio" class="form-check-input" name="sentimento" id="7" value="7-Outro" >
                 <label for="7" class="form-check-label">Outro: </label>
-                <input type="text" class="" name="sentimento_antes" id="7" placeholder="">
+                <input type="text" class="" name="sentimento" id="7" placeholder="" disabled>
             </div>
 
         </fieldset>

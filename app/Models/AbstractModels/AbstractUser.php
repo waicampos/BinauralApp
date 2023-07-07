@@ -153,4 +153,7 @@ abstract class AbstractUser extends Authenticatable
     {
         return $this->belongsToMany('\App\Models\group', 'group_member', 'user_id', 'group_id')->withPivot('id', 'authorization', 'city', 'phone_number', 'preferred_hour', 'weekday_id');
     }
+
+
+
 }

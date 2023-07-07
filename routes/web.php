@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CadastroController;
+use App\Http\Controllers\OficinaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpotifyController;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +62,24 @@ Route::get('/spotify/buscar/{search}', [SpotifyController::class, 'buscar']);
 
 Route::post('/playlist', [SpotifyController::class, 'playlist']);
 //Route::get('/playlist/salvar', [SpotifyController::class, 'playlist']);
+
+
+
+
+
+Route::get('/questionario_previo', function () {
+    return view('oficina.questionario-antes');
+})->middleware(['auth', 'verified'])->name('oficina');
+
+Route::get('/questionario_final', function () {
+    return view('oficina.questionario-depois');
+})->middleware(['auth', 'verified'])->name('questionario_fim');
+
+Route::post('/questionario_previo', [OficinaController::class, 'store_previo']
+)->middleware(['auth', 'verified'])->name('questionario_previo');
+
+Route::post('/questionario_final', [OficinaController::class, 'store_final']
+)->middleware(['auth', 'verified'])->name('questionario_final');
 
 
 

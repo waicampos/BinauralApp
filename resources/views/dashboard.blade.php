@@ -1,3 +1,4 @@
+
 <x-app-layout>
 
     @if ($user->is_member())
@@ -7,9 +8,10 @@
         <!-- <div class="container">
             <p>Ver Agenda das Oficinas</p>
         </div> -->
+
         @if ($user->is_workshop_time())
         <div>
-            <p>Iniciar oficina</p>
+            <a href="{{ route('oficina') }}" class="btn btn-primary">Iniciar oficina</a>
         </div>
         @else
         <div>

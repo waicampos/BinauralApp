@@ -153,7 +153,7 @@ function WebPlayback(props) {
             <>
                 <div className="container">
                     <div className="main-wrapper">
-                        <button className="btn btn-spotify" onClick={() => { play() }} > Iniciar Player </button>
+                        <button className="btn btn-primary" onClick={() => { play() }} > Iniciar Player </button>
                     </div>
                 </div>
             </>)
@@ -167,17 +167,17 @@ function WebPlayback(props) {
                 <div className="container">
                     <div className="main-wrapper">
 
-                        <img src={current_track.album.images[0].url} className="now-playing__cover" alt="" />
+                        {/* <img src={current_track.album.images[0].url} className="now-playing__cover" alt="" /> */}
 
                         <div className="now-playing__side">
                             <div className="now-playing__name">{current_track.name}</div>
                             <div className="now-playing__artist">{current_track.artists[0].name}</div>
 
-                            <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
+                            <button className="btn btn-primary" onClick={() => { player.previousTrack() }} >
                                 &lt;&lt;
                             </button>
                             {/* Aqui que eu tenho que chamar uma função que dá o togglePlay lá e o togglePlay no binaural */}
-                            <button className="btn-spotify" onClick={() => { 
+                            <button className="btn btn-primary" onClick={() => { 
                                 toogleWave();
                                 player.togglePlay(); 
                                 //binaural.paused ? binaural.play() : binaural.pause(); 
@@ -185,13 +185,19 @@ function WebPlayback(props) {
                                 {is_paused ? "PLAY" : "PAUSE"}
                             </button>
 
-                            <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
+                            <button className="btn btn-primary" onClick={() => { player.nextTrack() }} >
                                 &gt;&gt;
                             </button>
+
+                            <div className="my-3">
+                                <a className="btn btn-primary" href='/questionario_final'>Encerrar Player</a>
+                            </div>
+                            
                         </div>
 
 
                     </div>
+
                 </div>
                 {/* <div class="container">
                     <div class="playlist main-wrapper">
