@@ -31,7 +31,7 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->dateTime('email_verified_at')->nullable(true);
             $table->string('remember_token', 255)->nullable(true);
             $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->tinyInteger('category_id');
             // $table->tinyInteger('civil_state_id')->unsigned();
@@ -56,7 +56,7 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->date('starts_at');
             $table->date('ends_at');
             $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->tinyInteger('status_id')->unsigned();
         });
@@ -68,7 +68,7 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->tinyInteger('max_members');
             $table->time('hour');
             $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->boolean('needs_playlist');
             $table->boolean('needs_binaural');
@@ -90,7 +90,7 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->string('name', 100);
             $table->string('url', 255);
             $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('updated_at')->nullable();
             $table->tinyInteger('project_id')->unsigned();
             $table->tinyInteger('file_type_id')->unsigned();
             $table->tinyInteger('status_id')->unsigned();
@@ -105,7 +105,7 @@ class SkipperMigrations2023063012225434 extends Migration
         });
         Schema::create('playlists', function (Blueprint $table) {
             $table->string('uri', 255);
-            $table->timestamp('updated_at');
+            $table->timestamp('updated_at')->nullable();
             $table->integer('user_id')->unique()->unsigned();
         });
         Schema::create('eegs', function (Blueprint $table) {
@@ -167,7 +167,7 @@ class SkipperMigrations2023063012225434 extends Migration
             $table->date('date');
             $table->time('time');
             $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('updated_at')->nullable();
             $table->smallInteger('group_id')->unsigned();
             $table->tinyInteger('wokshop_status_id')->unsigned();
         });
